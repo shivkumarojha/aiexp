@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "nodenext",
   "scripts": {
     "dev": "nodemon"
   },
@@ -11,8 +12,18 @@
   "license": "ISC",
   "packageManager": "pnpm@10.8.1",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@google/genai": "^1.50.1",
+    "@tavily/core": "^0.7.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "zod": "^4.3.6"
   }
 }
