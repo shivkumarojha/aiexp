@@ -1,6 +1,6 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import "dotenv/config";
 import { tavily } from "@tavily/core";
 import { GoogleGenAI } from "@google/genai";
 import * as z from "zod";
@@ -10,9 +10,9 @@ app.use(cors());
 app.use(express.json());
 
 const tavilyClient = tavily({ apiKey: process.env.TAVILY_API_KEY! });
-
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY 
 // google gen aI
-const ai = new GoogleGenAI({});
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
 app.get("/health", (_, res) => {
   return res.status(200).json({
@@ -38,43 +38,54 @@ app.post("/conversation", async (req, res) => {
   const { query } = parsedData.data;
 
   // web search through tavily
-  const webSearchResponse = await tavilyClient.search(query, {
-    searchDepth: "advanced",
-  });
+  // const webSearchResponse = await tavilyClient.search(query, {
+  //   searchDepth: "advanced",
+  // });
 
-  const werbSearchResults = webSearchResponse.results;
+  // const webSearchResult = webSearchResponse.results;
 
+  // console.log(webSearchResult)
   // generate response from the llM
-  const prompt = PROMPT_TEMPLATE.replace(
-    "{{WEB_SEARCH_RESULTS}}",
-    JSON.stringify(werbSearchResults),
-  ).replace("{{USER_QUERY}}", query);
-  const result = await ai.models.generateContent({
+  // const prompt = PROMPT_TEMPLATE.replace(
+  //   "{{WEB_SEARCH_RESULTS}}",
+  //   JSON.stringify(webSearchResult),
+  // ).replace("{{USER_QUERY}}", query);
+  // const result = await ai.models.generateContent({
+  //   model: "gemini-2.5-flash-lite",
+  //   // model: "auto",
+  //   contents: prompt,
+  //   config: {
+  //     systemInstruction: SYSTEM_PROMPT,
+  //   },
+  // });
+
+  // console.log(prompt)
+  const result = await ai.models.generateContentStream({
     model: "gemini-2.5-flash-lite",
-    contents: prompt,
+    // model: "auto",
+    contents: query,
     config: {
       systemInstruction: SYSTEM_PROMPT,
     },
   });
-  console.log(result.text);
-  // res.header("Cache-Control", "no-cache");
-  // res.header("Content-Type", "text/event-stream");
-  // for await (const chunk of result) {
-  //   const chunkText = chunk.text
-  //   console.log(chunkText)
-  //   if(chunkText) {
-  //     res.write(chunk);
-  //   }
-  // }
+  res.header("Cache-Control", "no-cache");
+  res.header("Content-Type", "text/event-stream");
+  for await (const chunk of result) {
+    const chunkText = chunk.text;
+    console.log(chunkText);
+    if (chunkText) {
+      res.write(chunkText);
+    }
+  }
 
   // res.write("\n-----------------Sources------------\n");
 
   // close the event stream
-  // res.end();
-  return res.status(200).json({
-    message: "done",
-    result: result.text,
-  });
+  res.end();
+  // return res.status(200).json({
+  //   message: "done",
+  //   result: result.text,
+  // });
 });
 
 // follow up endpoint for follow up questions
@@ -84,6 +95,25 @@ app.post("/conversations-followup", async (req, res) => {
   // Step 2.5  TODO - Do context engineering here.
   // Step  3 -  stream the response from the server
 });
+
+app.get("/stream-test", (req, res) => {
+  res.setHeader("Content-Type", "text/plain; charset=utf-8");
+  res.setHeader("Transfer-Encoding", "chunked");
+  const data =
+    "hllo whhat are thee things that are thinsfsd flkjsdkfsdkfj".split(" ");
+  let i = 0;
+
+  const interval = setInterval(() => {
+    if (i < data.length) {
+      res.write(data[i] + " ");
+      i++;
+    } else {
+      clearInterval(interval);
+      res.end();
+    }
+  }, 50);
+});
+
 app.listen(process.env.PORT, () => {
   console.log("Server is listening at port ", process.env.PORT);
 });
