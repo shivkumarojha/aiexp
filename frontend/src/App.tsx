@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { BackgroundRippleEffect } from "./components/ui/background-ripple-effect";
-import { FollowUpArrow } from "./components/icons";
+import { EditSvg, FollowUpArrow } from "./components/icons";
 import { AiExp } from "./components/AiExp";
 import QueryInput from "./components/QueryInput";
 import { LoaderOne } from "./components/ui/loader";
+import { Button } from "./components/ui/button";
 
 interface Result {
   answer: string;
@@ -40,6 +41,7 @@ function App() {
         target?.isContentEditable;
       if (isTypingTarget) return;
       if (event.key.toLowerCase() === "i") {
+        setLastSubmittedQuery("")
         setIsVisible(true);
       }
     };
@@ -90,6 +92,9 @@ function App() {
     setIsVisible(false);
     solve(query);
   };
+  const handleEdit = () => {
+    setIsVisible(true);
+  };
   return (
     <div className="h-screen relative">
       <BackgroundRippleEffect />
@@ -100,6 +105,7 @@ function App() {
             <QueryInput
               onSubmit={handleSubmit}
               onClose={() => setIsVisible(false)}
+              initialValue={lastSubmittedQuery}
             />
           )}
           {/* <button onClick={() => solve()}>resolve</button> */}
@@ -125,9 +131,22 @@ function App() {
         </div>
       </div>
       {lastSubmittedQuery && (
-        <div className="p-3 bottom-0 absolute w-full border-t border-white-10 bg-black/30 backdrop-blur-sm">
-          <div className="mx-auto max-w-5xl px-4 py-3 text-sm text-gray-300">
-            <span className="text-xl text-white"><span className="text-gray-500 pr-4">Query:</span> {lastSubmittedQuery}</span>
+        <div className="p-3 flex bottom-0 items-center justify-around absolute w-full border-t border-white-10 bg-black/30 backdrop-blur-sm">
+          <div className="flex max-w-8xl px-4 py-3 text-sm text-gray-300">
+            <span className="text-xl text-white">
+              <span className="text-gray-500 pr-4">Query:</span>{" "}
+              {lastSubmittedQuery}
+            </span>
+          </div>
+          <div className="flex gap-4">
+            <Button onClick={() => handleEdit()}>
+              {" "}
+              <EditSvg />
+
+            </Button>
+            {!isVisible && (
+              <div className="text-xl pr-4 text-white/50">press i to ask</div>
+            )}
           </div>
         </div>
       )}

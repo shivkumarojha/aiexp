@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 
 interface QueryInputProps {
+  initialValue?: string;
   onSubmit: (query: string) => void;
   onClose: () => void;
 }
 
-export default function QueryInput({ onSubmit, onClose }: QueryInputProps) {
-  const [query, setQuery] = useState("");
+export default function QueryInput({
+  initialValue,
+  onSubmit,
+  onClose,
+}: QueryInputProps) {
+  const [query, setQuery] = useState(initialValue);
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && query.trim().length > 0) {
       onSubmit(query.trim());
@@ -20,6 +25,7 @@ export default function QueryInput({ onSubmit, onClose }: QueryInputProps) {
       <div className="bg-blue-400/30 text-red-700 w-full max-w-5xl backdrop-blur-md border border-white/20 p-6 rounded-xl shadow-lg pointer-events-auto">
         <input
           type="text"
+          value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Type here..."
