@@ -2,13 +2,13 @@ import { SparklesCore } from "./ui/sparkles";
 export function AiExp() {
   return (
     <div className="h-[8rem] relative w-full bg-black flex flex-col items-center justify-center overflow-hidden rounded-md">
-      <div className="w-full absolute inset-0 h-screen">
+      <div className="w-full absolute inset-0">
         <SparklesCore
           id="tsparticlesfullpage"
           background="transparent"
           minSize={0.6}
           maxSize={1.4}
-          particleDensity={100}
+          particleDensity={40}
           className="w-full h-full"
           particleColor="#FFFFFF"
         />

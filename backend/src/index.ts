@@ -59,28 +59,51 @@ app.post("/conversation", async (req, res) => {
   //   },
   // });
 
-  // console.log(prompt)
   const result = await ai.models.generateContentStream({
     model: "gemini-2.5-flash-lite",
-    // model: "auto",
     contents: query,
     config: {
       systemInstruction: SYSTEM_PROMPT,
     },
   });
-  res.header("Cache-Control", "no-cache");
-  res.header("Content-Type", "text/event-stream");
+
+  let fullResponse = "";
   for await (const chunk of result) {
-    const chunkText = chunk.text;
-    console.log(chunkText);
-    if (chunkText) {
-      res.write(chunkText);
+    if (chunk.text) {
+      fullResponse += chunk.text;
     }
   }
 
-  // res.write("\n-----------------Sources------------\n");
+  const delimiter = "|||END_ANSWER|||";
+  const delimiterIndex = fullResponse.indexOf(delimiter);
 
-  // close the event stream
+  let answerText = "";
+  let followUps: string[] = [];
+
+  if (delimiterIndex !== -1) {
+    answerText = fullResponse.slice(0, delimiterIndex).trim();
+    const jsonPart = fullResponse.slice(delimiterIndex + delimiter.length).trim();
+    try {
+      const parsed = JSON.parse(jsonPart);
+      followUps = parsed.followUps || [];
+    } catch {
+      followUps = [];
+    }
+  } else {
+    answerText = fullResponse;
+    followUps = [];
+  }
+
+  res.header("Cache-Control", "no-cache");
+  res.header("Content-Type", "text/event-stream");
+
+  const chunkSize = 5;
+  for (let i = 0; i < answerText.length; i += chunkSize) {
+    res.write(answerText.slice(i, i + chunkSize));
+    await new Promise((resolve) => setTimeout(resolve, 30));
+  }
+
+  res.write(`|||FOLLOWUPS|||${JSON.stringify(followUps)}`);
   res.end();
   // return res.status(200).json({
   //   message: "done",
