@@ -5,14 +5,21 @@ import { tavily } from "@tavily/core";
 import { GoogleGenAI } from "@google/genai";
 import * as z from "zod";
 import { PROMPT_TEMPLATE, SYSTEM_PROMPT } from "./prompts";
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "./auth";
 const app = express();
 app.use(cors());
+
+// auth handled by better-auth
+app.all("/api/auth/*", toNodeHandler(auth))
+
 app.use(express.json());
 
 const tavilyClient = tavily({ apiKey: process.env.TAVILY_API_KEY! });
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY 
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 // google gen aI
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+
 
 app.get("/health", (_, res) => {
   return res.status(200).json({
@@ -82,7 +89,9 @@ app.post("/conversation", async (req, res) => {
 
   if (delimiterIndex !== -1) {
     answerText = fullResponse.slice(0, delimiterIndex).trim();
-    const jsonPart = fullResponse.slice(delimiterIndex + delimiter.length).trim();
+    const jsonPart = fullResponse
+      .slice(delimiterIndex + delimiter.length)
+      .trim();
     try {
       const parsed = JSON.parse(jsonPart);
       followUps = parsed.followUps || [];
