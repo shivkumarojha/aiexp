@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
-
-export const VanishText = ({ error, setError, duration = 3000 }) => {
+interface VanishTextProps {
+  error: string;
+  setError: (value: string) => void
+  duration: number
+}
+export const VanishText = ({ error, setError, duration = 3000 }: VanishTextProps) => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -13,7 +17,7 @@ export const VanishText = ({ error, setError, duration = 3000 }) => {
 
   return (
     <div
-      className={`text-center text-red-400 transition-opacity duration-1000 ${isVisible ? "opacity-100" : "opacity-0"}`}
+      className={`text-red-400 transition-opacity duration-1000 ${isVisible ? "opacity-100" : "opacity-0"}`}
     >
       {error}
     </div>

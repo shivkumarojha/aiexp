@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface QueryInputProps {
   initialValue?: string;
@@ -13,8 +13,8 @@ export default function QueryInput({
 }: QueryInputProps) {
   const [query, setQuery] = useState(initialValue);
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter" && query.trim().length > 0) {
-      onSubmit(query.trim());
+    if (event.key === "Enter" && query!.trim().length > 0) {
+      onSubmit(query!.trim());
       setQuery("");
     } else if (event.key === "Escape") {
       onClose();

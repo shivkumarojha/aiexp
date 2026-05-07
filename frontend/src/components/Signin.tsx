@@ -1,7 +1,6 @@
 import { GalleryVerticalEnd } from "lucide-react"
 
 import { LoginForm } from "@/components/login-form"
-import { DottedGlowBackground } from "./ui/dotted-glow-background"
 import { AiexpGlowLogo } from "./LogoGlow"
 
 export function Signin() {
@@ -22,16 +21,9 @@ export function Signin() {
           </div>
         </div>
       </div>
-      {/* <div className="relative hidden bg-muted lg:block"> */}
-        {/* <img */}
-        {/*   src="/placeholder.svg" */}
-        {/*   alt="Image" */}
-        {/*   className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" */}
-        {/* /> */}
       <div className="flex">
         <AiexpGlowLogo />
       </div>
-      {/* </div> */}
     </div>
   )
 }

@@ -23,9 +23,9 @@ export function SignupForm({
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    const { data, error } = await authClient.signUp.email(
+    await authClient.signUp.email(
       {
         email,
         password,
@@ -33,10 +33,10 @@ export function SignupForm({
         callbackURL: "/dashboard",
       },
       {
-        onRequest: (ctx) => {
+        onRequest: () => {
           setLoading(true);
         },
-        onSuccess: (ctx) => {
+        onSuccess: () => {
           navigate("/dashboard");
         },
         onError: (ctx) => {

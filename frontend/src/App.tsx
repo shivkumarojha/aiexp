@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { BackgroundRippleEffect } from "./components/ui/background-ripple-effect";
-import { EditSvg, FollowUpArrow } from "./components/icons";
+import { EditSvg } from "./components/icons";
 import { AiExp } from "./components/AiExp";
 import QueryInput from "./components/QueryInput";
 import { LoaderOne } from "./components/ui/loader";
 import { Button } from "./components/ui/button";
 
-interface Result {
-  answer: string;
-  followUps: [string];
-}
 function App() {
   const [result, setResult] = useState("");
+  // @ts-ignore
   const [followUps, setFollowUps] = useState<string[]>([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -20,18 +17,6 @@ function App() {
   const [isVisible, setIsVisible] = useState(true);
 
   const [lastSubmittedQuery, setLastSubmittedQuery] = useState("");
-  // useEffect(() => {
-  //   const handleKeyDown = (event) => {
-  //     if (event.key == "i") {
-  //       setIsVisible(true);
-  //     }
-  //   };
-  //
-  //   window.addEventListener("keydown", handleKeyDown);
-  //   return () => {
-  //     window.removeEventListener("keydown", handleKeyDown);
-  //   };
-  // }, [isVisible]);
   useEffect(() => {
     const handleKeyUp = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
@@ -57,6 +42,9 @@ function App() {
       body: JSON.stringify({ query }),
     });
 
+    if(!response.body) {
+      throw Error("no response body")
+    }
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let accumulated = "";
@@ -117,17 +105,6 @@ function App() {
         )}
         <div className="w-full max-w-5xl mt-8">
           <div className="text-2xl tracking-wide">{result}</div>
-          {/* <div className="flex ml-12 mt-12"> */}
-          {/*   {result && ( */}
-          {/*     <div className="list-none text-lg"> */}
-          {/*       {result.followUps.map((question, index) => ( */}
-          {/*         <div className="flex text-xl text-gray-400 gap-4 p-2"> */}
-          {/*           <FollowUpArrow /> <li key={index + 1}>{question}</li> */}
-          {/*         </div> */}
-          {/*       ))} */}
-          {/*     </div> */}
-          {/*   )} */}
-          {/* </div> */}
         </div>
       </div>
       {lastSubmittedQuery && (

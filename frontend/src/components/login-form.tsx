@@ -22,7 +22,7 @@ export function LoginForm({
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     await authClient.signIn.email(
       {
@@ -33,7 +33,7 @@ export function LoginForm({
         onError: (ctx) => {
           setError(ctx.error.message);
         },
-        onSuccess: (ctx) => {
+        onSuccess: () => {
           navigate("/dashboard");
         },
       },
@@ -80,7 +80,7 @@ export function LoginForm({
             className="bg-background"
           />
         </Field>
-        {error && <VanishText error={error} setError={setError} />}
+        {error && <VanishText error={error} setError={setError} duration={3000} />}
         <Field>
           <Button onClick={handleLogin}>Login</Button>
         </Field>
