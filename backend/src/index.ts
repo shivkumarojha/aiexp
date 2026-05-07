@@ -6,12 +6,19 @@ import { GoogleGenAI } from "@google/genai";
 import * as z from "zod";
 import { PROMPT_TEMPLATE, SYSTEM_PROMPT } from "./prompts";
 import { toNodeHandler } from "better-auth/node";
-import { auth } from "./auth";
+import { auth } from "./auth.js";
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 
 // auth handled by better-auth
-app.all("/api/auth/*", toNodeHandler(auth))
+app.all("/api/auth/{*any}", toNodeHandler(auth));
 
 app.use(express.json());
 
@@ -19,7 +26,6 @@ const tavilyClient = tavily({ apiKey: process.env.TAVILY_API_KEY! });
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 // google gen aI
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
-
 
 app.get("/health", (_, res) => {
   return res.status(200).json({
