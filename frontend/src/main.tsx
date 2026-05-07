@@ -1,10 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.tsx'
+import App from './App'
 import {BrowserRouter, Routes, Route} from "react-router"
-import { Signin } from './components/Signin.tsx'
-import { Signup } from './components/Signup.tsx'
+import { Signin } from './components/Signin'
+import { Signup } from './components/Signup'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
