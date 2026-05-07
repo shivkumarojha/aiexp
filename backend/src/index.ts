@@ -4,7 +4,7 @@ import cors from "cors";
 import { tavily } from "@tavily/core";
 import { GoogleGenAI } from "@google/genai";
 import * as z from "zod";
-import { PROMPT_TEMPLATE, SYSTEM_PROMPT } from "./prompts";
+import { PROMPT_TEMPLATE, SYSTEM_PROMPT } from "./prompts.js";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./auth.js";
 const app = express();
