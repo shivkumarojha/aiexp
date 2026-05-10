@@ -21,7 +21,7 @@ export default function QueryInput({
     }
   };
   return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+    <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
       <div className="bg-blue-400/30 text-red-700 w-full max-w-5xl backdrop-blur-md border border-white/20 p-6 rounded-xl shadow-lg pointer-events-auto">
         <input
           type="text"

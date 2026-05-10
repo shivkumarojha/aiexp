@@ -103,8 +103,10 @@ function App() {
   if (!session) navigate("/");
   return (
     <div className="h-screen relative">
-      <BackgroundRippleEffect />
-      <AiExp />
+      <div className="fixed w-full p-4">
+        <BackgroundRippleEffect />
+        <AiExp />
+      </div>
       <div className="flex justify-center items-center w-full">
         <div className="flex items-center">
           {isVisible && (
@@ -121,14 +123,14 @@ function App() {
             <LoaderOne />
           </div>
         )}
-        <div className="w-full max-w-5xl mt-8 p-4 overflow-y-auto h-[calc(100vh-5rem)] scroll-smooth">
+        <div className="w-full max-w-5xl mt-32 z-2 p-4 overflow-y-auto h-[calc(100vh-5rem)] scroll-smooth">
           <div className="text-xl md:text-2xl tracking-wide">
             <Markdown>{result}</Markdown>
           </div>
         </div>
       </div>
       {lastSubmittedQuery && (
-        <div className="p-3 py-4 flex bottom-0 items-center justify-around fixed w-full border-t border-white-10 bg-black/30 backdrop-blur-sm">
+        <div className="p-3 z-20 py-4 flex bottom-0 items-center justify-around fixed w-full border-t border-white-10 bg-black/30 backdrop-blur-sm">
           <div className="flex overflow-y-auto h-20 max-w-8xl px-4 py-3 text-sm text-gray-300">
             <span className="text-xl text-white">
               <span className="text-gray-500 pr-4 truncate md:whitespace-normal">
