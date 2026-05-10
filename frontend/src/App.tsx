@@ -6,6 +6,8 @@ import { AiExp } from "./components/AiExp";
 import QueryInput from "./components/QueryInput";
 import { LoaderOne } from "./components/ui/loader";
 import { Button } from "./components/ui/button";
+import { authClient } from "./lib/auth-client";
+import { useNavigate } from "react-router";
 
 function App() {
   const [result, setResult] = useState("");
@@ -17,6 +19,10 @@ function App() {
   const [isVisible, setIsVisible] = useState(true);
 
   const [lastSubmittedQuery, setLastSubmittedQuery] = useState("");
+
+  const navigate = useNavigate()
+  // session and only redirect if user is logged in
+  const {data:session, isPending, error} = authClient.useSession()
   useEffect(() => {
     const handleKeyUp = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
@@ -83,6 +89,9 @@ function App() {
   const handleEdit = () => {
     setIsVisible(true);
   };
+
+  if(isPending) return <div className="flex h-screen justify-center items-center"><LoaderOne /></div>  
+  if(!session) navigate("/")
   return (
     <div className="h-screen relative">
       <BackgroundRippleEffect />
