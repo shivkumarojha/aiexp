@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { VanishText } from "./vanish-text";
+import { githubSignin, googleSignin } from "@/lib/auth";
 
 export function LoginForm({
   className,
@@ -40,19 +41,6 @@ export function LoginForm({
     );
   };
 
-  const googleSignin = async () => {
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: `${import.meta.env.VITE_FRONTEND_URL}/dashboard`,
-    });
-  };
-  
-  const githubSignin = async() => {
-    await authClient.signIn.social({
-      provider:"github",
-      callbackURL: `${import.meta.env.VITE_FRONTEND_URL}/dashboard`,
-    })
-  }
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props}>
       <FieldGroup>
