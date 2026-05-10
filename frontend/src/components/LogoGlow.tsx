@@ -3,7 +3,7 @@ import { DottedGlowBackground } from "@/components/ui/dotted-glow-background";
 export function AiexpGlowLogo() {
   return (
     <div className="relative flex  w-full items-end justify-end overflow-hidden rounded-md rounded-tl-3xl rounded-br-3xl rounded-bl-3xl border border-transparent px-4 shadow ring-1 shadow-black/10 ring-black/5 dark:shadow-white/10 dark:ring-white/5">
-      <div className="absolute inset-0  z-20 m-auto size-10 md:size-50 dark:invert text-2xl dark:filter p-4 flex justify-center items-center rounded-md bg-white text-black font-bold">AI Exp</div>
+      <div className="absolute inset-0  z-20 m-auto size-30 md:size-50 dark:invert text-2xl dark:filter p-4 flex justify-center items-center rounded-md bg-white text-black font-bold">AI Exp</div>
       <div className="relative z-20 flex w-full justify-between px-2 py-3 backdrop-blur-[2px] md:px-4">
         <p className="text-xs font-normal text-neutral-600 md:text-sm dark:text-neutral-400">
          Solve your query in less than 60 words. 

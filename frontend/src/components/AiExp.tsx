@@ -16,7 +16,7 @@ export function AiExp() {
     });
   };
   return (
-    <div className="h-[8rem] relative w-full bg-black flex flex-col items-center justify-center overflow-hidden rounded-md">
+    <div className="h-32 w-32 z-20 size-96 relative md:w-full bg-black flex flex-col items-center justify-center overflow-hidden rounded-md">
       <div className="w-full absolute inset-0">
         <SparklesCore
           id="tsparticlesfullpage"

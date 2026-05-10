@@ -6,6 +6,7 @@ import { AiExp } from "./components/AiExp";
 import QueryInput from "./components/QueryInput";
 import { LoaderOne } from "./components/ui/loader";
 import { Button } from "./components/ui/button";
+import Markdown from "react-markdown";
 import { authClient } from "./lib/auth-client";
 import { useNavigate } from "react-router";
 
@@ -20,9 +21,9 @@ function App() {
 
   const [lastSubmittedQuery, setLastSubmittedQuery] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   // session and only redirect if user is logged in
-  const {data:session, isPending, error} = authClient.useSession()
+  const { data: session, isPending, error } = authClient.useSession();
   useEffect(() => {
     const handleKeyUp = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
@@ -32,7 +33,7 @@ function App() {
         target?.isContentEditable;
       if (isTypingTarget) return;
       if (event.key.toLowerCase() === "i") {
-        setLastSubmittedQuery("")
+        setLastSubmittedQuery("");
         setIsVisible(true);
       }
     };
@@ -40,16 +41,19 @@ function App() {
     return () => window.removeEventListener("keyup", handleKeyUp);
   }, []);
   const solve = async (query: string) => {
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/conversation`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/conversation`,
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query }),
       },
-      body: JSON.stringify({ query }),
-    });
+    );
 
-    if(!response.body) {
-      throw Error("no response body")
+    if (!response.body) {
+      throw Error("no response body");
     }
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
@@ -90,8 +94,13 @@ function App() {
     setIsVisible(true);
   };
 
-  if(isPending) return <div className="flex h-screen justify-center items-center"><LoaderOne /></div>  
-  if(!session) navigate("/")
+  if (isPending)
+    return (
+      <div className="flex h-screen justify-center items-center">
+        <LoaderOne />
+      </div>
+    );
+  if (!session) navigate("/");
   return (
     <div className="h-screen relative">
       <BackgroundRippleEffect />
@@ -113,14 +122,18 @@ function App() {
           </div>
         )}
         <div className="w-full max-w-5xl mt-8 p-4 overflow-y-auto h-[calc(100vh-5rem)] scroll-smooth">
-          <div className="text-xl md:text-2xl tracking-wide">{result}</div>
+          <div className="text-xl md:text-2xl tracking-wide">
+            <Markdown>{result}</Markdown>
+          </div>
         </div>
       </div>
       {lastSubmittedQuery && (
         <div className="p-3 py-4 flex bottom-0 items-center justify-around fixed w-full border-t border-white-10 bg-black/30 backdrop-blur-sm">
           <div className="flex overflow-y-auto h-20 max-w-8xl px-4 py-3 text-sm text-gray-300">
             <span className="text-xl text-white">
-              <span className="text-gray-500 pr-4 truncate md:whitespace-normal">Query:</span>{" "}
+              <span className="text-gray-500 pr-4 truncate md:whitespace-normal">
+                Query:
+              </span>{" "}
               {lastSubmittedQuery}
             </span>
           </div>
@@ -128,10 +141,11 @@ function App() {
             <Button onClick={() => handleEdit()}>
               {" "}
               <EditSvg />
-
             </Button>
             {!isVisible && (
-              <div className="hidden md:block text-xl pr-4 text-white/50">press i to ask</div>
+              <div className="hidden md:block text-xl pr-4 text-white/50">
+                press i to ask
+              </div>
             )}
           </div>
         </div>

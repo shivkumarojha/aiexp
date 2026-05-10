@@ -17,6 +17,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  chats         chats[]
 
   @@unique([email])
   @@map("user")
@@ -68,4 +69,14 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model chats {
+  id     String @id
+  query  String
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Response {
 }
