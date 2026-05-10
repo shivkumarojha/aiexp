@@ -78,6 +78,8 @@ model Chats {
   userId    String
   user      User       @relation(fields: [userId], references: [id])
   responses Response[]
+
+  @@map("chats")
 }
 
 model Response {
@@ -87,4 +89,6 @@ model Response {
   chat     Chats  @relation(fields: [chatId], references: [id])
   userId   String
   user     User   @relation(fields: [userId], references: [id])
+
+  @@map("response")
 }

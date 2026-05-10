@@ -29,6 +29,9 @@ importers:
       express:
         specifier: ^5.2.1
         version: 5.2.1
+      pg:
+        specifier: ^8.20.0
+        version: 8.20.0
       pm2:
         specifier: ^7.0.1
         version: 7.0.1
@@ -45,6 +48,9 @@ importers:
       '@types/node':
         specifier: ^25.6.0
         version: 25.6.0
+      '@types/pg':
+        specifier: ^8.20.0
+        version: 8.20.0
       dotenv:
         specifier: ^17.4.2
         version: 17.4.2

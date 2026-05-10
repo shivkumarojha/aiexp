@@ -8,6 +8,7 @@ import { PROMPT_TEMPLATE, SYSTEM_PROMPT } from "./prompts.js";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./auth.js";
 import { authMiddleware } from "./middleware.js";
+import { prisma } from "./db.js";
 const app = express();
 app.use(
   cors({
@@ -50,7 +51,18 @@ app.post("/conversation", authMiddleware, async (req, res) => {
   }
 
   const { query } = parsedData.data;
+  // save query in the database
 
+  const userId = req.userId
+  try {
+    await prisma.chats.find({})
+
+    })
+    await prisma.user.findFirst({
+    where: {id: userId},
+    include: {chats: true}
+  })
+  }
   // web search through tavily
   // const webSearchResponse = await tavilyClient.search(query, {
   //   searchDepth: "advanced",
