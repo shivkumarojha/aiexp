@@ -45,6 +45,7 @@ function App() {
       `${import.meta.env.VITE_BACKEND_URL}/conversation`,
       {
         method: "post",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

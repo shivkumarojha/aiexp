@@ -13,9 +13,8 @@ const app = express();
 app.use(
   cors({
     origin: process.env.BETTER_AUTH_ORIGIN,
-    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   }),
 );
 
@@ -23,6 +22,7 @@ app.use(
 app.all("/api/auth/{*any}", toNodeHandler(auth));
 
 app.use(express.json());
+
 
 const tavilyClient = tavily({ apiKey: process.env.TAVILY_API_KEY! });
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -53,16 +53,9 @@ app.post("/conversation", authMiddleware, async (req, res) => {
   const { query } = parsedData.data;
   // save query in the database
 
-  const userId = req.userId
-  try {
-    await prisma.chats.find({})
+  const userId = req.userId;
 
-    })
-    await prisma.user.findFirst({
-    where: {id: userId},
-    include: {chats: true}
-  })
-  }
+  if(!userId) return 
   // web search through tavily
   // const webSearchResponse = await tavilyClient.search(query, {
   //   searchDepth: "advanced",
@@ -122,6 +115,17 @@ app.post("/conversation", authMiddleware, async (req, res) => {
     followUps = [];
   }
 
+  try {
+    await prisma.chats.create({
+      data: {
+        userId: userId,
+        query,
+        responses: answerText
+      },
+    });
+  } catch (error) {
+    throw new Error("Something went wrong while creating chat on chat model")
+  }
   res.header("Cache-Control", "no-cache");
   res.header("Content-Type", "text/event-stream");
 

@@ -28,7 +28,7 @@ export function AiExp() {
           particleColor="#FFFFFF"
         />
       </div>
-      <div className="flex justify-between">
+      <div className="flex pr-4 justify-between">
         <h1 className="md:text-3xl text-2xl items-center w-full font-bold text-center text-white relative z-20">
           AI Exp
         </h1>
