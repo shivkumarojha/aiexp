@@ -40,6 +40,12 @@ export function LoginForm({
     );
   };
 
+  const googleSignin = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: `${import.meta.env.VITE_FRONTEND_URL}/dashboard`,
+    });
+  };
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props}>
       <FieldGroup>
@@ -80,7 +86,9 @@ export function LoginForm({
             className="bg-background"
           />
         </Field>
-        {error && <VanishText error={error} setError={setError} duration={3000} />}
+        {error && (
+          <VanishText error={error} setError={setError} duration={3000} />
+        )}
         <Field>
           <Button onClick={handleLogin}>Login</Button>
         </Field>
@@ -95,7 +103,7 @@ export function LoginForm({
             </svg>
             Login with GitHub
           </Button>
-          <Button variant="outline" type="button">
+          <Button variant="outline" type="button" onClick={googleSignin}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
