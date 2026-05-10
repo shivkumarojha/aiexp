@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String     @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean    @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   sessions      Session[]
   accounts      Account[]
-  chats         chats[]
+  chats         Chats[]
+  responses     Response[]
 
   @@unique([email])
   @@map("user")
@@ -71,12 +72,19 @@ model Verification {
   @@map("verification")
 }
 
-model chats {
-  id     String @id
-  query  String
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+model Chats {
+  id        String     @id
+  query     String
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  responses Response[]
 }
 
 model Response {
+  id       String @id
+  response String
+  chatId   String
+  chat     Chats  @relation(fields: [chatId], references: [id])
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
 }

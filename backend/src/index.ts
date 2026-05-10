@@ -7,6 +7,7 @@ import * as z from "zod";
 import { PROMPT_TEMPLATE, SYSTEM_PROMPT } from "./prompts.js";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./auth.js";
+import { authMiddleware } from "./middleware.js";
 const app = express();
 app.use(
   cors({
@@ -38,7 +39,7 @@ app.get("/health", (_, res) => {
 const querySchema = z.object({
   query: z.string(),
 });
-app.post("/conversation", async (req, res) => {
+app.post("/conversation", authMiddleware, async (req, res) => {
   // get the user query from the body
   const parsedData = querySchema.safeParse(req.body);
 
@@ -120,10 +121,6 @@ app.post("/conversation", async (req, res) => {
 
   res.write(`|||FOLLOWUPS|||${JSON.stringify(followUps)}`);
   res.end();
-  // return res.status(200).json({
-  //   message: "done",
-  //   result: result.text,
-  // });
 });
 
 // follow up endpoint for follow up questions
