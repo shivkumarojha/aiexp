@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "pnpm install && tsc -b && pnpm prisma generate",
+    "build": "pnpm install && pnpm prisma generate && tsc -b",
     "start": "pm2 start dist/index.js",
     "postbuild": "mkdir -p dist/generated && cp -r src/generated/* dist/generated/"
   },
