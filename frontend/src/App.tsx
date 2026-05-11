@@ -23,7 +23,7 @@ function App() {
 
   const navigate = useNavigate();
   // session and only redirect if user is logged in
-  const { data: session, isPending, error } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
   useEffect(() => {
     const handleKeyUp = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
